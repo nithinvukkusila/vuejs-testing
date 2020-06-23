@@ -1,0 +1,16 @@
+{
+  "presets": [
+    ["env", { "modules": false }]
+  ],
+  "plugins": [
+    "syntax-dynamic-import"
+  ],
+  // we added these lines:
+  "env": {
+    "test": {
+      "presets": [
+        ["env", { "targets": { "node": "current" }}]
+      ]
+    }
+  }
+}
