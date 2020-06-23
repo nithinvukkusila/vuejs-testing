@@ -1,32 +1,13 @@
-version: 2
-jobs:
-  build:
-    docker:
-    - image: circleci/node:11.8-browsers
-    steps:
-    - checkout # special step to check out source code to working directory
-    - restore_cache: # special step to restore the dependency cache
-        key: dependency-cache-{{ checksum "package.json" }}
-    - run:
-        name: install npm dependencies
-        command: npm install
-    - save_cache: # special step to save the dependency cache
-        key: dependency-cache-{{ checksum "package.json" }}
-        paths:
-        - ./node_modules
-    - run:
-        name: starting a development server
-        command: npm run dev
-        background: true
-    - run: # loop, sleep 0.1 second and check ip 8080 every loop
-        name: waiting for server to be responsive (for e2e)
-        command: |
-            while ! nc -z localhost 8080; do
-              sleep 0.1
-            done
-    - run:
-        name: running unit tests
-        command: npm run test:unit
-    - run:
-        name: running end to end tests
-        command: npm run test:e2e
+# Use the latest 2.1 version of CircleCI pipeline process engine. See: https://circleci.com/docs/2.0/configuration-reference
+version: 2.1
+# Use a package of configuration called an orb.
+orbs:
+  # Declare a dependency on the welcome-orb
+  welcome: circleci/welcome-orb@0.4.1
+# Orchestrate or schedule a set of jobs
+workflows:
+  # Name the workflow "welcome"
+  welcome:
+    # Run the welcome/run job in its own container
+    jobs:
+      - welcome/run
